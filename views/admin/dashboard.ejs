@@ -1,0 +1,137 @@
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary">Admin Dashboard</h2>
+        <button type="button" class="btn btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#addProductModal">
+            <i class="bi bi-plus-circle"></i> Add New Product
+        </button>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped align-middle">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% products.forEach(product => { %>
+                            <tr>
+                                <td>
+                                    <img src="<%= product.image ? '/uploads/' + product.image : '/images/default-product.jpg' %>" 
+                                         width="50" 
+                                         height="50" 
+                                         alt="<%= product.name %>"
+                                         class="rounded-circle shadow-sm"
+                                         style="object-fit: cover;">
+                                </td>
+                                <td><strong><%= product.name %></strong></td>
+                                <td class="text-muted"><%= product.description %></td>
+                                <td class="text-success">Rp <%= product.price.toLocaleString() %></td>
+                                <td><%= product.stock %></td>
+                                <td>
+                                    <button class="btn btn-sm btn-warning text-white" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#editModal<%= product.id %>">
+                                        <i class="bi bi-pencil-square"></i> Edit
+                                    </button>
+                                    <form action="/admin/products/<%= product.id %>/delete" 
+                                          method="POST" 
+                                          class="d-inline"
+                                          onsubmit="return confirm('Are you sure you want to delete this product?')">
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <i class="bi bi-trash"></i> Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Product Modal -->
+<div class="modal fade" id="addProductModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">Add New Product</h5>
+                <button type="button" class="btn-close text-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/admin/products" method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label">Name</label>
+                        <input type="text" name="name" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea name="description" class="form-control" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Price</label>
+                        <input type="number" name="price" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Stock</label>
+                        <input type="number" name="stock" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Image</label>
+                        <input type="file" name="image" class="form-control" accept="image/*" required>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Add Product</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Product Modals -->
+<% products.forEach(product => { %>
+    <div class="modal fade" id="editModal<%= product.id %>" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-white">
+                    <h5 class="modal-title">Edit Product</h5>
+                    <button type="button" class="btn-close text-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/admin/products/<%= product.id %>" method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label class="form-label">Name</label>
+                            <input type="text" name="name" class="form-control" value="<%= product.name %>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea name="description" class="form-control" required><%= product.description %></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Price</label>
+                            <input type="number" name="price" class="form-control" value="<%= product.price %>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Stock</label>
+                            <input type="number" name="stock" class="form-control" value="<%= product.stock %>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Image</label>
+                            <input type="file" name="image" class="form-control" accept="image/*">
+                            <small class="text-muted">Leave empty to keep current image</small>
+                        </div>
+                        <button type="submit" class="btn btn-warning text-white w-100">Update Product</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+<% }) %>

@@ -1,0 +1,23 @@
+<h2 class="text-center mb-5">Welcome to <span style="color: #ff6fa5;">MANIEKBYDO</span></h2>
+
+<div class="row">
+    <% products.forEach(product => { %>
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-0" style="border-radius: 15px;">
+                <img src="/<%= product.image %>" class="card-img-top" alt="<%= product.name %>" style="border-radius: 15px 15px 0 0;">
+                <div class="card-body" style="background-color: #ffe6f0;">
+                    <h5 class="card-title" style="color: #ff4081; font-weight: 600;"><%= product.name %></h5>
+                    <p class="card-text text-muted" style="font-size: 0.9rem;"><%= product.description %></p>
+                    <p class="card-text" style="color: #6d6875;">
+                        <strong>Price:</strong> Rp <%= product.price.toLocaleString() %><br>
+                        <strong>Stock:</strong> <%= product.stock %>
+                    </p>
+                    <a href="https://wa.me/6282124708761?text=Saya tertarik dengan produk <%= product.name %> (Rp <%= product.price.toLocaleString() %>)" 
+                       class="btn btn-success btn-sm px-4 py-2" style="background-color: #ff6fa5; border-color: #ff6fa5; color: white;" target="_blank">
+                        Order via WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    <% }) %>
+</div>
